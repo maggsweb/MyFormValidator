@@ -1,2 +1,2 @@
 # MyFormValidator
-Simple PHP Form Validation Class
+MyFormValidator : An easy-to-use PHP Form Validation Class
