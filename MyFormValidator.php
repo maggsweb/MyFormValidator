@@ -31,7 +31,7 @@ class FormValidator {
      */
     public function setMethod($method)
     {
-        if($method == 'post'||$method == 'POST'){
+        if(trim(strtolower($method)) == 'post'){
             $this->method = $_POST;
         }
     }
@@ -41,7 +41,8 @@ class FormValidator {
      * @desc Store all submitted fields on:
      * $this->fields;
      */
-    public function registerFields(){
+    public function registerFields()
+    {
         if(is_array($this->method)){
             foreach($this->method as $key => $tmp){
                 if(is_array($tmp)){
@@ -174,7 +175,8 @@ class FormValidator {
      * @param type $requiredSelections
      * @return $this
      */
-    public function checkboxGroupRequired($requiredSelections=1){
+    public function checkboxGroupRequired($requiredSelections=1)
+    {
         if(isset($this->method[$this->field])){
             if(is_array($this->method[$this->field])){
                 if(count($this->method[$this->field]) < $requiredSelections){
