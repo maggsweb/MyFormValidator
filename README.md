@@ -15,6 +15,8 @@ An easy-to-use PHP Form Validation Class
 
 This class is instantiated after submission of a form.
 
+Fields are registered within the class, so that Validation methods can be performed and arrays of errors/values returned
+
 ```php
 
 require_once ('MyFormValidator.php');
@@ -39,6 +41,10 @@ $formVal->registerFields();
 
 
 ## Validation Methods
+
+All of these methods can be chained if required.
+
+eg: $formVal->validate('some-field-name')->clean()->isRequired()->isEmail();
 
 ```php
 
@@ -73,6 +79,8 @@ $formVal->validate('some-checkbox-group-name')->checkboxGroupRequired(2);
 
 ## Return Methods
 
+The getErrors() and getValues() methods are available to the processing file to return arrays for processing
+
 ```php
 
 /**
@@ -91,4 +99,4 @@ $fields = $formVal->getFields();
 
 ```
 
-
+See fully working example in example.php
