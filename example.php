@@ -2,24 +2,10 @@
 
 include 'classes/MyFormValidator.php';
 
-// Default Form Field Values
-// -------------------------
-$fields = array();
-$fields['firstname'] = '';
-$fields['surname'] = '';
-$fields['emailadd'] = '';
-$fields['password'] = '';
-$fields['department'] = '';
-$fields['interests'] = array();
-
-// Default Error Array
-//--------------------
-$errors = false;
-
 // Form Validation
 //-----------------------------------------------------------
 if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
-
+    
     $formVal = new FormValidator();
     $formVal->setMethod('POST');
     $formVal->registerFields();
@@ -34,50 +20,62 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
     $errors = $formVal->getErrors();
     $fields = $formVal->getFields();
 
+} else {
+    
+    // Default Form Field Values
+    // -------------------------
+    $fields = array();
+    $fields['firstname'] = '';
+    $fields['surname'] = '';
+    $fields['emailadd'] = '';
+    $fields['password'] = '';
+    $fields['department'] = '';
+    $fields['interests'] = array();
+    
+    $errors = false;
+    
 }
 
 ?>
 
-<div class='row'>
-    <div class='col-xs-6'>
-        <pre>
-        <?php var_dump($fields,'Form Fields',0,0); ?>
-        </pre>
-    </div>
-    <div class='col-xs-6'>
-        <pre>
-        <?php var_dump($errors,'Errors',0,0); ?>
-        </pre>
-    </div>
-</div>
+
+<pre style="background-color:#d6ffcc;padding: 10px; border: 1px dashed green;">
+<?php var_dump($fields); ?>
+</pre>
+
+<pre style="background-color:#ffaeae;padding: 10px; border: 1px dashed red;">
+<?php var_dump($errors); ?>
+</pre>
+
+
 
 <form action="" method="post">
     
-    <table class='table table-bordered'>
+    <table cellspacing="0" cellpadding="3">
         
         <tr>
             <th>First Name</th>
-            <td><input name="firstname" id='firstname' type="text" value="<?=$fields['firstname'] ?>" class='form-control'/></td>
+            <td><input name="firstname" id='firstname' type="text" value="<?=$fields['firstname'] ?>" /></td>
         </tr>
         
         <tr>
             <th>Surname</th>
-            <td><input name="surname" id='surname' type="text" value="<?=$fields['surname'] ?>" class='form-control'/></td>
+            <td><input name="surname" id='surname' type="text" value="<?=$fields['surname'] ?>" /></td>
         </tr>
         
         <tr>
             <th>Email</th>
-            <td><input name="emailadd" id='emailadd' type="text" value="<?=$fields['emailadd'] ?>" class='form-control'/></td>
+            <td><input name="emailadd" id='emailadd' type="text" value="<?=$fields['emailadd'] ?>" /></td>
         </tr>
         
         <tr>
             <th>Password</th>
-            <td><input name="password" id='password' type="password" value="<?=$fields['password'] ?>" class='form-control' /></td>
+            <td><input name="password" id='password' type="password" value="<?=$fields['password'] ?>" /></td>
         </tr>
         
         <tr>
             <th>Department</th>
-            <td><select name='department' id='department' class='form-control'>
+            <td><select name='department' id='department'>
                     <option value=''>Select..</option>
                     <option value='HR'        <?=isset($fields['department']) && in_array('HR',        (array)$fields['department'])?'selected':''?>>HR</option>
                     <option value='IT'        <?=isset($fields['department']) && in_array('IT',        (array)$fields['department'])?'selected':''?>>IT</option>
