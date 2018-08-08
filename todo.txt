@@ -1,0 +1,19 @@
+
+I D E A S  ...............
+__________________________
+
+
+
+
+Available Validation Rules
+
+    boolean
+    email
+    float
+    integer
+    ip
+    required
+    url
+
+ 
+
