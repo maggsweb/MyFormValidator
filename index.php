@@ -38,6 +38,18 @@ $formVal->validate('some-field-name')->isEmail();
 $formVal->validate('some-field-name')->isPassword(6,20,false);
 
 /**
+ * Validate as a URL
+ */
+$formVal->validate('some-field-name')->isURL();
+
+/**
+ * Validate as numeric, or zero
+ * - optionally validating within a set range
+ */
+$formVal->validate('some-field-name')->isNumber();
+//$formVal->validate('some-field-name')->isNumber(array(10,99));
+
+/**
  * Ensure that X number of check-box options have been selected
  */
 $formVal->validate('some-checkbox-group-name')->checkboxGroupRequired(2);

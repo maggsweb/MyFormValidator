@@ -59,8 +59,23 @@ $formVal->validate('some-field-name')->isEmail();
 
 /**
  * Validate input value as a password, using set rules set
+ * - MinCharacters
+ * - Max Characters
+ * - Require Uppercase Character
  */
-$formVal->validate('some-field-name')->isPassword();
+$formVal->validate('some-field-name')->isPassword(6,20,false);
+
+/**
+ * Validate as a URL
+ */
+$formVal->validate('website')->clean()->isURL();
+
+/**
+ * Validate as numeric, or zero
+ * - optionally validating within a set range
+ */
+$formVal->validate('age')->isNumber();
+//$formVal->validate('age')->isNumber(array(10,99));
 
 /**
  * Ensure that X number of check-box options have been selected
