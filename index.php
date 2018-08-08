@@ -2,19 +2,9 @@
 
 /**
  * Instantiate the FormValidator for use
+ * Flag method as POST
  */
-$formVal = new FormValidator();
-
-/**
- * Set METHOD.
- * Default is _GET (in which case this step can be skipped)
- */
-$formVal->setMethod('POST');
-
-/**
- * Register all submitted fields into the class
- */
-$formVal->registerFields();
+$formVal = new FormValidator('POST');
 
 
 // ----------------------------------------------------------------
@@ -41,8 +31,11 @@ $formVal->validate('some-field-name')->isEmail();
 
 /**
  * Validate input value as a password, using set rules set
+ * - MinCharacters
+ * - Max Characters
+ * - Require Uppercase Character
  */
-$formVal->validate('some-field-name')->isPassword();
+$formVal->validate('some-field-name')->isPassword(6,20,false);
 
 /**
  * Ensure that X number of check-box options have been selected

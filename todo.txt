@@ -3,17 +3,6 @@ I D E A S  ...............
 __________________________
 
 
+File Upload - new branch
 
-
-Available Validation Rules
-
-    boolean
-    email
-    float
-    integer
-    ip
-    required
-    url
-
- 
-
+Add BS 4 and style it

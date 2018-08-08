@@ -18,30 +18,27 @@ class FormValidator {
             $errors = array(),
             $fields = array();
         
-    public function __construct()
+    public function __construct($method = 'GET')
     {
         // Default 'form method'
         $this->method = $_GET;
-    }
-
-    
-    /**
-     * @desc optional method to set 'form method' to POST
-     * @param type $method
-     */
-    public function setMethod($method)
-    {
+        
         if(trim(strtolower($method)) == 'post'){
             $this->method = $_POST;
         }
+        
+        $this->_registerFields();
+        
     }
+    
+    // PRIVATE METHODS  /////////////////////////////////////////////////////////////////
     
     
     /**
      * @desc Store all submitted fields on:
      * $this->fields;
      */
-    public function registerFields()
+    private function _registerFields()
     {
         if(is_array($this->method)){
             foreach($this->method as $key => $tmp){
@@ -50,12 +47,17 @@ class FormValidator {
                 } else {
                     if(isset($this->fields[$key])){
                         $this->fields[$key] = $this->method[$tmp];
+                    } else {
+                        $this->fields[$key] = '';
                     }
                 }
             }
         }
+        //var_dump($this->fields);
     }
     
+    
+    // PUBLIC METHODS  /////////////////////////////////////////////////////////////////
     
     /**
      * @desc Return an array of errors for processing
@@ -144,8 +146,55 @@ class FormValidator {
     public function isEmail()
     {
         if(isset($this->method[$this->field])){
-            if(! filter_var($this->fields[$this->field], FILTER_VALIDATE_EMAIL)){
+            $EMAIL = filter_var($this->fields[$this->field], FILTER_SANITIZE_EMAIL);
+            if(filter_var($EMAIL, FILTER_VALIDATE_EMAIL) === false){
                 $this->errors[$this->field] = 'Email address is invalid';
+            }
+        }
+        $this->fields[$this->field] = strtolower($EMAIL);
+        return $this;
+    }
+    
+    
+    /**
+     * 
+     * @return $this
+     */
+    public function isURL()
+    {
+        if(isset($this->method[$this->field])){
+            $URL = filter_var($this->fields[$this->field], FILTER_SANITIZE_URL);
+            if(filter_var($URL, FILTER_VALIDATE_URL) === false){
+                $this->errors[$this->field] = 'URL is invalid';
+            }
+        }
+        $this->fields[$this->field] = strtolower($URL);
+        return $this;
+    }
+    
+    
+    /**
+     * 
+     * @return $this
+     */
+    public function isNumber($withinRange = false)
+    {
+        if(isset($this->method[$this->field])){
+            
+            $NUMBER = $this->fields[$this->field];
+            
+            // Integer
+            if (!(filter_var($NUMBER, FILTER_VALIDATE_INT) === 0 || filter_var($NUMBER, FILTER_VALIDATE_INT))) {
+                $this->errors[$this->field] = 'Value is not numeric';
+                return $this;
+            }
+
+            // Range
+            if(is_array($withinRange)){
+                list($min,$max) = $withinRange;
+                if (filter_var($NUMBER, FILTER_VALIDATE_INT, array("options" => array("min_range"=>$min, "max_range"=>$max))) === false) {
+                    $this->errors[$this->field] = "Value is not with the range of $min - $max";
+                }
             }
         }
         return $this;
@@ -156,14 +205,26 @@ class FormValidator {
      * 
      * @return $this
      */
-    public function isPassword()
+    public function isPassword($minChar=6, $maxChar=20, $forceUpperCase = false)
     {
+        if($maxChar <= $minChar){
+            $maxChar = $minChar + 6;
+        }
+        
         if(isset($this->method[$this->field])){
-            if(strlen($this->fields[$this->field]) < 6){
-                $this->errors[$this->field] = 'Password must be 6 characters';
+            if(strlen($this->fields[$this->field]) < $minChar){
+                $this->errors[$this->field] = "Passwords must be more than $minChar characters";
+                return $this;
             }
-            if(strlen($this->fields[$this->field]) > 20){
-                $this->errors[$this->field] = 'Password must be less than 20 characters';
+            if(strlen($this->fields[$this->field]) > $maxChar){
+                $this->errors[$this->field] = "Passwords must be less than $maxChar characters";
+                return $this;
+            }
+            if($forceUpperCase){
+                if(!preg_match('/[A-Z]+/',$this->fields[$this->field])){
+                    $this->errors[$this->field] = "Passwords must contain an uppercase charcacter";
+                    return $this;
+                }
             }
         }
         return $this;
@@ -184,7 +245,7 @@ class FormValidator {
                 }
             }
         } else {
-            $this->errors[$this->field] = 'You must make selections';
+            $this->errors[$this->field] = 'You must select '.$requiredSelections.' options';
         }
         return $this;
     }
