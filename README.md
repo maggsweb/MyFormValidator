@@ -23,19 +23,11 @@ require_once ('MyFormValidator.php');
 
 /**
  * Instantiate the FormValidator for use
+ * Flag method as POST
+ * (Default is GET)
  */
-$formVal = new FormValidator();
+$formVal = new FormValidator('POST');
 
-/**
- * Set METHOD.
- * Default is _GET (in which case this step can be skipped)
- */
-$formVal->setMethod('POST');
-
-/**
- * Register all submitted fields into the class
- */
-$formVal->registerFields();
 
 ```
 
