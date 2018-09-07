@@ -7,7 +7,7 @@ An easy-to-use PHP Form Validation Class
 ### Table of Contents
 **[Initialization](#initialization)**  
 **[Validation Methods](#validation)**  
-**[File Upload](#fileupload)**  
+**[File Upload Method](#fileupload)**  
 **[Return Methods](#return)**  
 
 <hr>
@@ -88,7 +88,7 @@ $formVal->validate('some-checkbox-group-name')->checkboxGroupRequired(2);
 
 
 
-## File Upload
+## File Upload Method
 
 Optional validation of file uploads
 
@@ -101,8 +101,8 @@ Optional validation of file uploads
  */
 $options = [];
 $options['path']          = 'uploads/';
-$options['allow']         = array('pdf','txt');
-$options['disallow']      = array('pdf','pdf');
+$options['allow']         = array('txt');
+$options['disallow']      = array('pdf');
 $options['maxFilesize']   = 1; // 1Mb
 
 /**
