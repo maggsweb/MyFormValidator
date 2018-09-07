@@ -122,7 +122,7 @@ if($fileUpload->uploadFile()){
 
  ```
 
-## Return Methods
+## Return Methods 
 
 The getErrors() and getValues() methods are available to the processing file to return arrays for processing
 
