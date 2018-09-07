@@ -7,6 +7,7 @@ An easy-to-use PHP Form Validation Class
 ### Table of Contents
 **[Initialization](#initialization)**  
 **[Validation Methods](#validation)**  
+**[File Upload](#fileupload)**  
 **[Return Methods](#return)**  
 
 <hr>
@@ -83,6 +84,43 @@ $formVal->validate('age')->isNumber();
 $formVal->validate('some-checkbox-group-name')->checkboxGroupRequired(2);
 
 ```
+
+
+
+
+## File Upload
+
+Optional validation of file uploads
+
+```php
+
+/**
+ * Optional
+ * --------
+ * Override default options to allow configuration
+ */
+$options = [];
+$options['path']          = 'uploads/';
+$options['allow']         = array('pdf','txt');
+$options['disallow']      = array('pdf','pdf');
+$options['maxFilesize']   = 1; // 1Mb
+
+/**
+ * Process File Upload, 
+ *  returning an error to add to the existing array
+ *  or a success message
+ */
+
+$fileUpload = new FileValidator('fileupload');
+$fileUpload->setOptions($options);
+
+if($fileUpload->uploadFile()){
+    $fields['fileupload'] = $fileUpload->getSuccess();
+} else {
+    $errors['fileupload'] = $fileUpload->getError();
+}
+
+ ```
 
 ## Return Methods
 
