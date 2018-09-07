@@ -6,9 +6,9 @@ An easy-to-use PHP Form Validation Class
 
 ### Table of Contents
 **[Initialization](#initialization)**  
-**[Validation Methods](#validation)**  
-**[File Upload Method](#fileupload)**  
-**[Return Methods](#return)**  
+**[Validation Methods](#validation-methods)**  
+**[File Upload Method](#file-upload-method)**  
+**[Return Methods](#return-methods)**  
 
 <hr>
 
