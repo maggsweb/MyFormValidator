@@ -107,8 +107,8 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
      */
     $options = [];
     $options['path']          = 'uploads/';
-    $options['allow']         = array('pdf','txt');
-    $options['disallow']      = array('pdf','pdf');
+    $options['allow']         = array('txt');
+    $options['disallow']      = array('pdf');
     $options['maxFilesize']   = 1; // 1Mb
 
     $fileUpload = new FileValidator('fileupload');
