@@ -18,7 +18,7 @@ class FormValidator {
             $errors = array(),
             $fields = array();
         
-    public function __construct($method = 'GET')
+    public function __construct($method = 'get')
     {
         // Default 'form method'
         $this->method = $_GET;

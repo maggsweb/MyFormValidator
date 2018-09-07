@@ -1,6 +1,7 @@
  <?php
 
 include 'MyFormValidator.php';
+include 'MyFileValidator.php';
 
 // Form Validation
 //-----------------------------------------------------------
@@ -83,8 +84,8 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
      */
   //$formVal->validate('interests')->checkboxGroupRequired();
     $formVal->validate('interests')->checkboxGroupRequired(2);
-    
-    
+       
+       
     /**
      * Array of error messages.
      * Key   - Form 'name' | span 'id'
@@ -96,7 +97,33 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
      * Sanitised form fields for use...
      */
     $fields = $formVal->getFields();
+    
+    
+    
+    /**
+     * ----------------------------------------------------
+     * FILE UPLOAD - MyFilevalidator
+     * ----------------------------------------------------
+     */
+    $options = [];
+    $options['path']          = 'uploads/';
+    $options['allow']         = array('pdf','txt');
+    $options['disallow']      = array('pdf','pdf');
+    $options['maxFilesize']   = 1; // 1Mb
 
+    $fileUpload = new FileValidator('fileupload');
+    $fileUpload->setOptions($options);
+    
+    if($fileUpload->uploadFile()){
+        $fields['fileupload'] = $fileUpload->getSuccess();
+    } else {
+        $errors['fileupload'] = $fileUpload->getError();
+    }
+    
+    // ----------------------------------------------------
+
+    
+    
 } else {
     
     // Form 'values' for use in form
@@ -145,10 +172,10 @@ In reality:
 for HTML 5 inline validation
 -->
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     
     <table cellspacing="0" cellpadding="3">
-        
+
         <tr>
             <th>First Name</th>
             <td><input name="firstname" id='firstname' type="text" value="<?=$fields['firstname'] ?>" /></td>
@@ -199,6 +226,13 @@ for HTML 5 inline validation
                     <input type='checkbox' name='interests[]' value='MySQL' id='cb2' <?=isset($fields['interests']) && in_array('MySQL',(array)$fields['interests'])?'checked':''?> /> <label for='cb2'>MySQL</label>
                     <input type='checkbox' name='interests[]' value='OOP'   id='cb3' <?=isset($fields['interests']) && in_array('OOP',  (array)$fields['interests'])?'checked':''?> /> <label for='cb3'>OOP</label>
                 </span>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Upload File</th>
+            <td>
+                <input type="file" name="fileupload" id="fileupload" />
             </td>
         </tr>
         
