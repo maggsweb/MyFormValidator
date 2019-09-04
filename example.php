@@ -1,7 +1,7 @@
  <?php
 
-include 'MyFormValidator.php';
-include 'MyFileValidator.php';
+include 'FormValidator.php';
+include 'FileValidator.php';
 
 // Form Validation
 //-----------------------------------------------------------
@@ -12,10 +12,11 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
      * ---------------
      * 
      * Flag form as 'POST'
-     * (Default is GET)
-     * 
+     *
      */
-    $formVal = new FormValidator('POST');
+    $formVal = new FormValidator();
+    $formVal->setMethod('post');
+
     
     /**
      * Text Input
@@ -102,7 +103,7 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
     
     /**
      * ----------------------------------------------------
-     * FILE UPLOAD - MyFilevalidator
+     * FILE UPLOAD - FileValidator
      * ----------------------------------------------------
      */
     $options = [];

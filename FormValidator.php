@@ -12,20 +12,33 @@
  **/
  
 class FormValidator {
-    
-    private $method,
-            $field,
-            $errors = array(),
-            $fields = array();
-        
-    public function __construct($method = 'get')
+
+    /**
+     * @var string
+     */
+    private $method;
+
+    /**
+     * @var string
+     */
+    private $field;
+
+    /**
+     * @var array 
+     */
+    public $errors = array();
+
+    /**
+     * @var array 
+     */
+    public $fields = array();
+
+    /**
+     * FormValidator constructor.
+     */
+    public function __construct()
     {
-        // Default 'form method'
-        $this->method = $_GET;
-        
-        if(trim(strtolower($method)) == 'post'){
-            $this->method = $_POST;
-        }
+        $this->setMethod();
         
         $this->_registerFields();
         
@@ -33,10 +46,8 @@ class FormValidator {
     
     // PRIVATE METHODS  /////////////////////////////////////////////////////////////////
     
-    
     /**
-     * @desc Store all submitted fields on:
-     * $this->fields;
+     * Set form fields
      */
     private function _registerFields()
     {
@@ -53,15 +64,28 @@ class FormValidator {
                 }
             }
         }
-        //var_dump($this->fields);
     }
     
     
     // PUBLIC METHODS  /////////////////////////////////////////////////////////////////
-    
+
+
     /**
-     * @desc Return an array of errors for processing
-     * @return type
+     * Set form method
+     * @param string $method
+     */
+    public function setMethod($method='get')
+    {
+        if(trim(strtolower($method)) == 'post'){
+            $this->method = $_POST;
+        }
+        $this->method = $_GET;
+    }
+    
+
+    /**
+     * Return an array of errors for processing
+     * @return array
      */
     public function getErrors()
     {
@@ -70,8 +94,8 @@ class FormValidator {
 
     
     /**
-     * @desc Return an array of validated fields for processing
-     * @return type
+     * Return an array of validated fields for processing
+     * @return array
      */
     public function getFields()
     {
@@ -81,7 +105,7 @@ class FormValidator {
 
     /**
      * 
-     * @param type $field
+     * @param string $field
      * @return $this
      */
     public function validate($field)
@@ -90,15 +114,15 @@ class FormValidator {
         if(isset($this->fields[$field])){
             $this->fields[$field] = $this->method[$field];
         }
-        
-        // Set fieldname for further validation
+
+        // Set field name for further validation
         $this->field = $field;
         return $this;
     }
 
     
     ///////////////////////////////////////////////////////////////////////////////////////////
-    //  Additional Validation Methods   ///////////////////////////////////////////////////////
+    //  Public Validation Methods   ///////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
     
     
@@ -174,7 +198,7 @@ class FormValidator {
     
     
     /**
-     * 
+     * @param bool $withinRange
      * @return $this
      */
     public function isNumber($withinRange = false)
@@ -202,7 +226,9 @@ class FormValidator {
     
     
     /**
-     * 
+     * @param int $minChar
+     * @param int $maxChar
+     * @param bool $forceUpperCase
      * @return $this
      */
     public function isPassword($minChar=6, $maxChar=20, $forceUpperCase = false)
@@ -232,8 +258,7 @@ class FormValidator {
     
     
     /**
-     * 
-     * @param type $requiredSelections
+     * @param int $requiredSelections
      * @return $this
      */
     public function checkboxGroupRequired($requiredSelections=1)
@@ -250,12 +275,4 @@ class FormValidator {
         return $this;
     }
     
-    
 }
-    
-    
-    
-    
-    
-    
-    

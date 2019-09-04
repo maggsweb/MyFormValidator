@@ -13,63 +13,77 @@
  
 class FileValidator {
     
-    private 
+    private
+
     /**
      * $fieldname
      * @desc Form field name
+     * @var string
      */        
     $fieldname,
 
     /**
      * $fileArray
-     * @desc Global uploaded file array 
+     * @desc Global uploaded file array
+     * @var array
      */
     $fileArray,
     
     /**
      * $fileName
      * @desc cleaned generated filename
+     * @var string
      */
     $fileName,
             
     /**
      * $fileExtension
      * @desc lowercase file extension
+     * @var string
      */
     $fileExtension;
             
     public
+
     /**
      * $path
      * @desc Absolute path to writable directory
-     * @var type 
+     * @var string
      */
     $path,
             
     /**
      * $allow
      * @desc Array of file extensions to 'allow'
+     * @var array
      */
     $allow,
     /**
      * $deny
      * @desc Array of file extensions to 'deny'
+     * @var array
      */
     $deny,
             
     /**
      * $maxfilesize
      * @desc maximum upload file size (in bytes) or false;
+     * @var int
      */
     $maxfilesize,
     
     /**
      * $uploadError
-     * @param type $fieldname
+     * @param $fieldname
+     * @var string
      */
     $uploadError;
-    
-        
+
+
+    /**
+     * FileValidator constructor.
+     * @param string $fieldname
+     */
     public function __construct($fieldname)
     {
         $this->fieldname        = $fieldname;
@@ -96,18 +110,13 @@ class FileValidator {
             $this->$name = $value;
         }
     }
-    
 
-    
-    
     
     /**
      * 
      */
     public function uploadFile(){
-        
-        
-        
+
         // File upload error
         if($this->fileArray['error']){
             $this->uploadError = $this->fileArray['error'];
@@ -169,7 +178,7 @@ class FileValidator {
     
     /**
      * 
-     * @return type
+     * @return string
      */
     public function getSuccess(){
         return "{$this->fileName}.{$this->fileExtension} was successfully uploaded";
@@ -187,10 +196,11 @@ class FileValidator {
             $this->incrementFilename(2);
         }
     }
+
     
     /**
      * 
-     * @param type $digit
+     * @param int $digit
      */
     private function incrementFilename($digit)
     {
@@ -205,19 +215,20 @@ class FileValidator {
             $this->incrementFilename($digit+1);
         }
     }
-    
+
+
     /**
-     * 
-     * @return type
+     * @return bool|string
      */
     public function getError()
     {
         return $this->_getErrorMessage($this->uploadError);
     }
-        
+
+
     /**
      * 
-     * @param type $errorNumber
+     * @param int $errorNumber
      * @return boolean|string
      */
     private function _getErrorMessage($errorNumber)
@@ -241,10 +252,11 @@ class FileValidator {
             default: return false;
         }
     }
-    
+
+
     /**
      * 
-     * @return type
+     * @return string
      */
     private function _cleanFilename()
     {
@@ -261,10 +273,11 @@ class FileValidator {
         
         return $cleanFilename;
     }
-    
+
+
     /**
      * 
-     * @return type
+     * @return string
      */
     private function _fileExtension()
     {

@@ -4,7 +4,8 @@
  * Instantiate the FormValidator for use
  * Flag method as POST
  */
-$formVal = new FormValidator('POST');
+$formVal = new FormValidator();
+$formVal->setMethod('post');
 
 
 // ----------------------------------------------------------------

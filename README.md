@@ -1,4 +1,4 @@
-# MyFormValidator
+# Maggsweb Form Validator
 
 An easy-to-use PHP Form Validation Class
 
@@ -25,13 +25,11 @@ require_once ('MyFormValidator.php');
 /**
  * Instantiate the FormValidator for use
  * Flag method as POST
- * (Default is GET)
  */
-$formVal = new FormValidator('POST');
-
+$formVal = new FormValidator();
+$formVal->setMethod('post');
 
 ```
-
 
 ## Validation Methods
 
