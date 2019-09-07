@@ -10,212 +10,199 @@
  *
  * @version   1.0
  **/
- 
-class FileValidator {
-    
-    private
-
-    /**
+class FileValidator
+{
+    /*
      * $fieldname
      * @desc Form field name
      * @var string
-     */        
-    $fieldname,
-
-    /**
+     */
+    private $fieldname;
+    /*
      * $fileArray
      * @desc Global uploaded file array
      * @var array
      */
-    $fileArray,
-    
-    /**
+    private $fileArray;
+    /*
      * $fileName
      * @desc cleaned generated filename
      * @var string
      */
-    $fileName,
-            
-    /**
+    private $fileName;
+    /*
      * $fileExtension
      * @desc lowercase file extension
      * @var string
      */
-    $fileExtension;
-            
-    public
+    private $fileExtension;
 
-    /**
+    /*
      * $path
      * @desc Absolute path to writable directory
      * @var string
      */
-    $path,
-            
-    /**
+    public $path;
+
+    /*
      * $allow
      * @desc Array of file extensions to 'allow'
      * @var array
      */
-    $allow,
-    /**
+    public $allow;
+
+    /*
      * $deny
      * @desc Array of file extensions to 'deny'
      * @var array
      */
-    $deny,
-            
-    /**
+    public $deny;
+
+    /*
      * $maxfilesize
      * @desc maximum upload file size (in bytes) or false;
      * @var int
      */
-    $maxfilesize,
-    
-    /**
+    public $maxfilesize;
+
+    /*
      * $uploadError
      * @param $fieldname
      * @var string
      */
-    $uploadError;
-
+    public $uploadError;
 
     /**
      * FileValidator constructor.
+     *
      * @param string $fieldname
      */
     public function __construct($fieldname)
     {
-        $this->fieldname        = $fieldname;
-        $this->fileArray        = $_FILES[$fieldname];
-        $this->fileName         = $this->_cleanFilename();
-        $this->fileExtension    = $this->_fileExtension();
-        
+        $this->fieldname = $fieldname;
+        $this->fileArray = $_FILES[$fieldname];
+        $this->fileName = $this->_cleanFilename();
+        $this->fileExtension = $this->_fileExtension();
+
         // Set default options
-        $this->path          = '/';
-        $this->maxFilesize   = 10;  // 10Mb
-        $this->uploadError   = false;
-        $this->allow         = false;
-        $this->disallow      = false;
+        $this->path = '/';
+        $this->maxFilesize = 10;  // 10Mb
+        $this->uploadError = false;
+        $this->allow = false;
+        $this->disallow = false;
     }
-    
-    
+
     /**
-     * 
      * @param array $optionsArray
      */
     public function setOptions(array $optionsArray)
     {
-        foreach($optionsArray as $name => $value){
+        foreach ($optionsArray as $name => $value) {
             $this->$name = $value;
         }
     }
 
-    
-    /**
-     * 
-     */
-    public function uploadFile(){
+    public function uploadFile()
+    {
 
         // File upload error
-        if($this->fileArray['error']){
+        if ($this->fileArray['error']) {
             $this->uploadError = $this->fileArray['error'];
+
             return false;
         }
-        
+
         // Check directory
-        if(!is_dir($this->path)){
+        if (!is_dir($this->path)) {
             $this->uploadError = 100;
+
             return false;
         }
-        
+
         // Check writeble directory
-        if(!is_writable($this->path)){
+        if (!is_writable($this->path)) {
             $this->uploadError = 101;
+
             return false;
         }
-        
+
         // Check allowed file extension
-        if(is_array($this->allow)){
-            if(!in_array($this->fileExtension,$this->allow)){
+        if (is_array($this->allow)) {
+            if (!in_array($this->fileExtension, $this->allow)) {
                 $this->uploadError = 102;
+
                 return false;
             }
         }
-        
+
         // Check denied file extension
-        if(is_array($this->deny)){
-            if(in_array($this->fileExtension,$this->deny)){
+        if (is_array($this->deny)) {
+            if (in_array($this->fileExtension, $this->deny)) {
                 $this->uploadError = 102;
+
                 return false;
             }
         }
-        
+
         // Size
         $b = $this->fileArray['size'];
         $kb = $b / 1024;
         $mb = $kb / 1024;
-        if($mb > $this->maxFilesize){
+        if ($mb > $this->maxFilesize) {
             $this->uploadError = 103;
-                return false;
+
+            return false;
         }
-        
+
         // Check if filename already exists
-        if (file_exists($this->path . $this->fileName . '.' . $this->fileExtension)) {
+        if (file_exists($this->path.$this->fileName.'.'.$this->fileExtension)) {
             $this->makeUniqueFilename();
         }
-        
+
         // Copy Files
-        if(!move_uploaded_file($this->fileArray['tmp_name'], $this->path . $this->fileName . '.' . $this->fileExtension)){
+        if (!move_uploaded_file($this->fileArray['tmp_name'], $this->path.$this->fileName.'.'.$this->fileExtension)) {
             $this->uploadError = 104;
+
             return false;
         }
 
         return true;
-        
     }
-    
-    
+
     /**
-     * 
      * @return string
      */
-    public function getSuccess(){
+    public function getSuccess()
+    {
         return "{$this->fileName}.{$this->fileExtension} was successfully uploaded";
     }
 
-    
-    /**
-     * 
-     */
-    private function makeUniqueFilename(){
+    private function makeUniqueFilename()
+    {
         // Create new filename with numeric part
         $this->fileName .= '_1';
         // Incremented filename exists
-        if (file_exists($this->path . $this->fileName . '.' . $this->fileExtension)) {
+        if (file_exists($this->path.$this->fileName.'.'.$this->fileExtension)) {
             $this->incrementFilename(2);
         }
     }
 
-    
     /**
-     * 
      * @param int $digit
      */
     private function incrementFilename($digit)
     {
         // New incremented filename
-        $tmp = explode('_',$this->fileName);
+        $tmp = explode('_', $this->fileName);
         array_pop($tmp);
-        $this->fileName = implode('_',$tmp) . '_'.$digit;
-        
+        $this->fileName = implode('_', $tmp).'_'.$digit;
+
         // Incremented filename exists
-        if (file_exists($this->path . $this->fileName . '.' . $this->fileExtension)) {
+        if (file_exists($this->path.$this->fileName.'.'.$this->fileExtension)) {
             // Increment until unique
-            $this->incrementFilename($digit+1);
+            $this->incrementFilename($digit + 1);
         }
     }
-
 
     /**
      * @return bool|string
@@ -225,15 +212,14 @@ class FileValidator {
         return $this->_getErrorMessage($this->uploadError);
     }
 
-
     /**
-     * 
      * @param int $errorNumber
-     * @return boolean|string
+     *
+     * @return bool|string
      */
     private function _getErrorMessage($errorNumber)
     {
-        switch($errorNumber){
+        switch ($errorNumber) {
             // Standard File Upload errors
             case 1:  return 'The uploaded file exceeds the UPLOAD_MAX_FILESIZE directive in php.ini.';
             case 2:  return 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
@@ -247,43 +233,37 @@ class FileValidator {
             case 101: return "The directory '$this->path' is not writable";
             case 102: return "The uploaded file extension '$this->fileExtension' is not allowed";
             case 103: return "The uploaded file exceeded the allowed filesize of {$this->maxFilesize}Mb";
-            case 104: return "Error moving unloaded file";
-                
+            case 104: return 'Error moving unloaded file';
+
             default: return false;
         }
     }
 
-
     /**
-     * 
      * @return string
      */
     private function _cleanFilename()
     {
-        
         $fileNameArray = explode('.', $this->fileArray['name']);
-        
+
         array_pop($fileNameArray);
-        
-        $dirtyFileName = implode('',$fileNameArray); 
-        $dirtyFileName = preg_replace('/\s+/', "-", $dirtyFileName);
-        $dirtyFileName = preg_replace("/[^a-zA-Z0-9\-\_]/", "", $dirtyFileName);
+
+        $dirtyFileName = implode('', $fileNameArray);
+        $dirtyFileName = preg_replace('/\s+/', '-', $dirtyFileName);
+        $dirtyFileName = preg_replace("/[^a-zA-Z0-9\-\_]/", '', $dirtyFileName);
         $dirtyFileName = strtolower($dirtyFileName);
         $cleanFilename = trim($dirtyFileName);
-        
+
         return $cleanFilename;
     }
 
-
     /**
-     * 
      * @return string
      */
     private function _fileExtension()
     {
         $fileNameArray = explode('.', $this->fileArray['name']);
+
         return strtolower(array_pop($fileNameArray));
     }
-    
-    
 }

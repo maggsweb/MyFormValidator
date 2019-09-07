@@ -5,61 +5,58 @@ include 'FileValidator.php';
 
 // Form Validation
 //-----------------------------------------------------------
-if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
-    
+if (isset($_POST['frmName']) && $_POST['frmName'] == 'example') {
+
     /**
      * Form Validator
-     * ---------------
-     * 
-     * Flag form as 'POST'
+     * ---------------.
      *
+     * Flag form as 'POST'
      */
     $formVal = new FormValidator();
     $formVal->setMethod('post');
 
-    
-    /**
+    /*
      * Text Input
      * ----------
      * - mandatory
      */
     $formVal->validate('firstname')->clean()->isRequired();
-    
-    /**
+
+    /*
      * Text Input
      * ----------
      * - optional
      */
     $formVal->validate('surname')->clean();
-    
-    /**
+
+    /*
      * Email Address
      * -------------
      * - mandatory
      * - validated as email address
      */
     $formVal->validate('emailadd')->clean()->isRequired()->isEmail();
-    
-    /**
+
+    /*
      * URL
      * ---
      * - mandatory
      * - validated as URL
      */
     $formVal->validate('website')->clean()->isRequired()->isURL();
-    
-    
-    /**
+
+    /*
      * Number
      * ------
      * - mandatory
      * - validated as numeric, or zero
      * - optionally validating within a set range
      */
-  //$formVal->validate('age')->clean()->isRequired()->isNumber();
-    $formVal->validate('age')->clean()->isRequired()->isNumber(array(10,99));
-    
-    /**
+    //$formVal->validate('age')->clean()->isRequired()->isNumber();
+    $formVal->validate('age')->clean()->isRequired()->isNumber([10, 99]);
+
+    /*
      * Password
      * --------
      * - mandatory
@@ -68,70 +65,64 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
      * - optionally require uppercase char
      * (Should only return 1 error at a a time)
      */
-  //$formVal->validate('password')->clean()->isRequired()->isPassword();
-    $formVal->validate('password')->clean()->isRequired()->isPassword(4,10, true);
-    
-    /**
+    //$formVal->validate('password')->clean()->isRequired()->isPassword();
+    $formVal->validate('password')->clean()->isRequired()->isPassword(4, 10, true);
+
+    /*
      * Select Box
      * ----------
      * - mandatory
      */
     $formVal->validate('department')->isRequired();
-    
-    /**
+
+    /*
      * Checkbox Group
      * --------------
      * At least $x options should be selected
      */
-  //$formVal->validate('interests')->checkboxGroupRequired();
+    //$formVal->validate('interests')->checkboxGroupRequired();
     $formVal->validate('interests')->checkboxGroupRequired(2);
-       
-       
+
     /**
      * Array of error messages.
      * Key   - Form 'name' | span 'id'
-     * Value - Validation Message
+     * Value - Validation Message.
      */
     $errors = $formVal->getErrors();
-    
+
     /**
      * Sanitised form fields for use...
      */
     $fields = $formVal->getFields();
-    
-    
-    
+
     /**
      * ----------------------------------------------------
      * FILE UPLOAD - FileValidator
-     * ----------------------------------------------------
+     * ----------------------------------------------------.
      */
     $options = [];
-    $options['path']          = 'uploads/';
-    $options['allow']         = array('txt');
-    $options['disallow']      = array('pdf');
-    $options['maxFilesize']   = 1; // 1Mb
+    $options['path'] = 'uploads/';
+    $options['allow'] = ['txt'];
+    $options['disallow'] = ['pdf'];
+    $options['maxFilesize'] = 1; // 1Mb
 
     $fileUpload = new FileValidator('fileupload');
     $fileUpload->setOptions($options);
-    
-    if($fileUpload->uploadFile()){
+
+    if ($fileUpload->uploadFile()) {
         $fields['fileupload'] = $fileUpload->getSuccess();
     } else {
         $errors['fileupload'] = $fileUpload->getError();
     }
-    
-    // ----------------------------------------------------
 
-    
-    
+    // ----------------------------------------------------
 } else {
-    
+
     // Form 'values' for use in form
     // These are overwritten by the Validation Class on submission
     // -----------------------------------------------------------
-    
-    $fields = array();
+
+    $fields = [];
     $fields['firstname'] = '';
     $fields['surname'] = '';
     $fields['emailadd'] = '';
@@ -139,10 +130,9 @@ if(isset($_POST['frmName']) && $_POST['frmName']=='example'){
     $fields['password'] = '';
     $fields['age'] = '';
     $fields['department'] = '';
-    $fields['interests'] = array();
-    
+    $fields['interests'] = [];
+
     $errors = false;
-    
 }
 
 ?>
@@ -211,10 +201,10 @@ for HTML 5 inline validation
             <th>Department</th>
             <td><select name='department' id='department'>
                     <option value=''>Select..</option>
-                    <option value='HR'        <?=isset($fields['department']) && in_array('HR',        (array)$fields['department'])?'selected':''?>>HR</option>
-                    <option value='IT'        <?=isset($fields['department']) && in_array('IT',        (array)$fields['department'])?'selected':''?>>IT</option>
-                    <option value='Sales'     <?=isset($fields['department']) && in_array('Sales',     (array)$fields['department'])?'selected':''?>>Sales</option>
-                    <option value='Marketing' <?=isset($fields['department']) && in_array('Marketing', (array)$fields['department'])?'selected':''?>>Marketing</option>
+                    <option value='HR'        <?=isset($fields['department']) && in_array('HR', (array) $fields['department']) ? 'selected' : ''?>>HR</option>
+                    <option value='IT'        <?=isset($fields['department']) && in_array('IT', (array) $fields['department']) ? 'selected' : ''?>>IT</option>
+                    <option value='Sales'     <?=isset($fields['department']) && in_array('Sales', (array) $fields['department']) ? 'selected' : ''?>>Sales</option>
+                    <option value='Marketing' <?=isset($fields['department']) && in_array('Marketing', (array) $fields['department']) ? 'selected' : ''?>>Marketing</option>
                 </select>
             </td>
         </tr>
@@ -223,9 +213,9 @@ for HTML 5 inline validation
             <th>Interests</th>
             <td>
                 <span id='interests'><!-- ID for Error -->
-                    <input type='checkbox' name='interests[]' value='PHP'   id='cb1' <?=isset($fields['interests']) && in_array('PHP',  (array)$fields['interests'])?'checked':''?> /> <label for='cb1'>PHP</label>
-                    <input type='checkbox' name='interests[]' value='MySQL' id='cb2' <?=isset($fields['interests']) && in_array('MySQL',(array)$fields['interests'])?'checked':''?> /> <label for='cb2'>MySQL</label>
-                    <input type='checkbox' name='interests[]' value='OOP'   id='cb3' <?=isset($fields['interests']) && in_array('OOP',  (array)$fields['interests'])?'checked':''?> /> <label for='cb3'>OOP</label>
+                    <input type='checkbox' name='interests[]' value='PHP'   id='cb1' <?=isset($fields['interests']) && in_array('PHP', (array) $fields['interests']) ? 'checked' : ''?> /> <label for='cb1'>PHP</label>
+                    <input type='checkbox' name='interests[]' value='MySQL' id='cb2' <?=isset($fields['interests']) && in_array('MySQL', (array) $fields['interests']) ? 'checked' : ''?> /> <label for='cb2'>MySQL</label>
+                    <input type='checkbox' name='interests[]' value='OOP'   id='cb3' <?=isset($fields['interests']) && in_array('OOP', (array) $fields['interests']) ? 'checked' : ''?> /> <label for='cb3'>OOP</label>
                 </span>
             </td>
         </tr>
@@ -248,8 +238,8 @@ for HTML 5 inline validation
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
-    <?php if($errors){ ?>
-    <?php foreach($errors as $fieldName => $message){ ?>
+    <?php if ($errors) { ?>
+    <?php foreach ($errors as $fieldName => $message) { ?>
     $("#<?=$fieldName ?>").addClass('error');
     $("#<?=$fieldName ?>").after("<span class='errorMessage'><?=$message ?></span>");
     <?php } ?>
