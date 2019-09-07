@@ -1,3 +1,5 @@
+[![StyleCI](https://github.styleci.io/repos/108392626/shield?branch=master)](https://github.styleci.io/repos/108392626)
+
 # Maggsweb Form Validator
 
 An easy-to-use PHP Form Validation Class
